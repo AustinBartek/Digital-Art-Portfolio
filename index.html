@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Digital Art Portfolio</title>
+    <link href="common.css" rel="stylesheet">
+    <style>
+        .container {
+            background-color: var(--container-color);
+            border-radius: 4vmin;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2vmin;
+            margin: 5vmin;
+        }
+
+        .subcontainer {
+            background-color: var(--subcontainer-color);
+            border-radius: 2vmin;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 4vmin;
+            margin-bottom: 2vmin;
+
+            border-style: outset;
+            border-width: 0.2vmin;
+            border-color: var(--border-color);
+        }
+
+        #mediaArea {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .navButton {
+            width: 10vmin;
+            height: 10vmin;
+            font-size: 3vmin;
+            border-radius: 1vmin;
+            background-color: var(--button-color);
+            color: white;
+            margin: 2vmin;
+        }
+
+        .navButton:hover {
+            background-color: var(--button-hover-color);
+        }
+
+        #imageContainer {
+            flex-direction: column;
+        }
+
+        .fancyText {
+            text-align: center;
+            width: 100%;
+            color: white;
+            background-color: var(--container-color);
+            padding: 1vmin;
+            box-sizing: border-box;
+            border-radius: 1vmin;
+            margin-top: 0;
+        }
+
+        .mediaView {
+            width: 70vw;
+            max-height: 80vh;
+            object-fit: contain;
+        }
+
+        #videoView {
+            cursor: pointer;
+        }
+
+        #linkView {
+            cursor: pointer;
+        }
+
+        #mediaSearchContainer {
+            width: 80vw;
+            flex-direction: column;
+        }
+
+        #mediaSearch {
+            width: 50vw;
+            font-size: 4vmin;
+            font-family: monospace;
+            border-radius: 1vmin;
+            margin-bottom: 2vmin;
+        }
+
+        #mediaGrid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            border-style: double;
+            border-width: 1vmin;
+            border-color: var(--border-color);
+        }
+
+        .mediaGridItem {
+            width: 100%;
+            aspect-ratio: 16/9;
+            transition: all 0.2s ease-out;
+            border-width: 0.2vmin;
+            border-color: gray;
+            border-style: solid;
+        }
+
+        .mediaGridItem:hover {
+            transform: scale(1.1);
+        }
+
+        #thankYouContainer {
+            width: 80vw;
+            color: white;
+            flex-direction: column;
+        }
+
+        .paragraph {
+            text-align: center;
+            color: white;
+            font-size: 3vmin;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="main">
+        <p class="paragraph">By <a href="https://github.com/AustinBartek?tab=repositories">Austin Bartek</a></p>
+        <div id="mainContainer" class="container">
+            <div>
+                <div id="mediaArea">
+                    <button id="backButton" class="navButton">&lt;</button>
+                    <div id="imageContainer" class="subcontainer">
+                        <h2 id="mediaTitle" class="fancyText"></h2>
+                        <img id="imageView" class="mediaView hidden">
+                        <video id="videoView" class="mediaView hidden" controls></video>
+                        <img id="linkView" class="mediaView hidden">
+                    </div>
+                    <button id="forwardButton" class="navButton">&gt;</button>
+                </div>
+            </div>
+            <div id="mediaSearchContainer" class="subcontainer">
+                <input type="text" id="mediaSearch">
+                <div id="mediaGrid"></div>
+            </div>
+            <div id="thankYouContainer" class="subcontainer">
+                <h1 class="fancyText"><u>Thank you for stopping by!</u></h1>
+                <p class="paragraph fancyText">I appreciate you checking out my digital art!
+                    I am always trying to learn new things and get better at anything and everything computer-related.
+                    Have a good day, you deserve it.
+
+                    If you want to see any other somewhat cool stuff...
+                </p>
+                <p class="paragraph fancyText">
+                    Heres my <a target="blank" href="https://www.instagram.com/austinbartek07/">Instagram</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        const imgData = (name, path) => { return { name: name, path: path, type: "image" } };
+        const videoData = (name, path) => { return { name: name, path: path, type: "video" } };
+        const linkData = (name, path, url) => { return { name: name, path: path, url: url, type: "link" } };
+        const getFullPath = (path) => { return "./res/" + path };
+
+        const MEDIA = [
+            imgData("Falcon Ceremony", "FalconCeremony.png"),
+            imgData("Lost Memory", "Pool.png"),
+            imgData("Hazy Sunset", "hazySunset.png"),
+            imgData("Yellow Duck", "yellowDuck.png"),
+
+            videoData("Freaky Ball", "Freaky.mkv"),
+            videoData("Neon Spiral", "GlowyThingy.mkv"),
+            videoData("Star Girl", "StarGirl.mkv"),
+            videoData("Watah", "Watah.mkv"),
+            videoData("Card Transition Effect", "cardTransition.mp4"),
+
+            linkData("Barber Shop", "BarberShop.png", "https://www.shadertoy.com/view/X3BBDy"),
+            linkData("Limacons", "Limacons.png", "https://www.shadertoy.com/view/WccSz7"),
+            linkData("Raymarching", "Raymarching.png", "https://www.shadertoy.com/view/4XsfWS"),
+            linkData("Cubic Rain", "CubicRain.png", "https://www.shadertoy.com/view/lf2XzV"),
+            linkData("Bridge To Nothing", "BridgeToNothing.png", "https://www.shadertoy.com/view/lcjSRd"),
+
+        ];
+        let mediaIndex = 0;
+
+        const main = document.getElementById("main");
+        const leftButton = document.getElementById("backButton");
+        const rightButton = document.getElementById("forwardButton");
+        const imageView = document.getElementById("imageView");
+        const videoView = document.getElementById("videoView");
+        const linkView = document.getElementById("linkView");
+        const titleElem = document.getElementById("mediaTitle");
+        const searchBar = document.getElementById("mediaSearch");
+        const mediaGrid = document.getElementById("mediaGrid");
+
+        // Defining the media button setup
+        function changeMedia(dir) {
+            mediaIndex += dir;
+            if (mediaIndex < 0) {
+                mediaIndex = MEDIA.length - 1;
+            }
+            if (mediaIndex >= MEDIA.length) {
+                mediaIndex = 0;
+            }
+
+            const mediaItem = MEDIA[mediaIndex];
+            if (mediaItem.type == "video") {
+                videoView.src = getFullPath(mediaItem.path);
+                videoView.classList.remove("hidden");
+                //Hide the rest
+                imageView.classList.add("hidden");
+                linkView.classList.add("hidden");
+            } else if (mediaItem.type == "image") {
+                imageView.src = getFullPath(mediaItem.path);
+                imageView.classList.remove("hidden");
+                //Hide the rest
+                videoView.classList.add("hidden");
+                linkView.classList.add("hidden");
+            } else {
+                linkView.src = getFullPath(mediaItem.path);
+                linkView.classList.remove("hidden");
+                linkView.onclick = () => window.open(mediaItem.url, "_blank");
+                //Hide the rest
+                imageView.classList.add("hidden");
+                videoView.classList.add("hidden");
+            }
+            titleElem.textContent = mediaItem.name;
+        }
+
+        leftButton.addEventListener("click", () => changeMedia(-1));
+        rightButton.addEventListener("click", () => changeMedia(1));
+
+        // Defining the media grid setup
+        function createMediaGridItem(media, index) {
+            let item;
+            if (media.type == "video") {
+                item = document.createElement("video");
+            } else if (media.type == "image") {
+                item = document.createElement("img");
+            } else {
+                item = document.createElement("img");
+            }
+            item.src = getFullPath(media.path);
+            item.title = media.name;
+            item.classList.add("mediaGridItem");
+            item.addEventListener("click", () => {
+                mediaIndex = index;
+                changeMedia(0);
+                main.scrollTop = 0;
+            });
+            return item;
+        }
+
+        function filterMediaGrid(search) {
+            mediaGrid.innerHTML = "";
+            let test = 0;
+            for (let i = 0; i < MEDIA.length; i++) {
+                const media = MEDIA[i];
+                if (media.name.toLowerCase().includes(search) || media.path.toLowerCase().includes(search)) {
+                    mediaGrid.appendChild(createMediaGridItem(media, i));
+                }
+            }
+        }
+
+        searchBar.addEventListener("input", () => { filterMediaGrid(searchBar.value.toLowerCase()) });
+
+        changeMedia(0);
+        filterMediaGrid("");
+    </script>
+</body>
+
+</html>

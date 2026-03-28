@@ -1,0 +1,32 @@
+:root {
+    --background-color: rgb(10, 12, 20);
+    --container-color: rgb(21, 15, 33);
+    --subcontainer-color: rgb(41, 35, 53);
+    --border-color: rgb(86, 70, 103);
+    --button-color: var(--border-color);
+    --button-hover-color: color-mix(in srgb, var(--button-color) 90%, white 50%);
+}
+
+.hidden {
+    display: none;
+}
+
+html {
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    font-family: monospace;
+    margin: 0;
+    width: 100%;
+    height: 100%;
+}
+
+#main {
+    background-color: var(--background-color);
+    width: 100%;
+    height: 100%;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
