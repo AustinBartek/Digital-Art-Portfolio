@@ -1,8 +1,8 @@
 :root {
-    --background-color: rgb(10, 12, 20);
+    --background-color: rgb(10, 6, 12);
     --container-color: rgb(21, 15, 33);
     --subcontainer-color: rgb(41, 35, 53);
-    --border-color: rgb(86, 70, 103);
+    --border-color: rgb(86, 196, 132);
     --button-color: var(--border-color);
     --button-hover-color: color-mix(in srgb, var(--button-color) 90%, white 50%);
 }
